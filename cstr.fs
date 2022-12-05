@@ -62,8 +62,6 @@ C-FUNCTION C-STRERR strerror   n     -- a
 
 END-C-LIBRARY
 
-CREATE str-buf $ff chars allot
-
 : $>F ( c-addr -- r )
     c-atof ;
 
@@ -74,28 +72,27 @@ CREATE str-buf $ff chars allot
     dup c-strlen ;
 
 : STRCPY { a_ c_ } ( -- c-addr u )
-    nil str-buf !
-    str-buf c_ c-strcpy 
-    str-buf strlen false cstr a_ !
-    a_ @ strlen ;
+    a_ c_ c-strcpy 
+    strlen false cstr 
+    dup a_ !
+    strlen ;
 
 : STRCAT  { a_ c_ } ( -- c-addr u )
     nil str-buf !
-    a_ @ strlen false cstr str-buf !
-    str-buf c_ c-strcat drop 
-    str-buf strlen false cstr a_ !
-    a_ @ strlen ;
+    a_ @ c_ c-strcat 
+    strlen false cstr 
+    dup a_ !
+    strlen ;
 
 
 : STRNCPY { a_ c_ n_ } ( -- c-addr u ) 
-    nil str-buf !
-    str-buf c_ n_ c-strncpy 
-    str-buf strlen false cstr a_ !
-    a_ @ strlen ;
+    a_ c_ n_ c-strncpy 
+    strlen false cstr 
+    dup a_ ! 
+    strlen ;
 
-: STRNCAT  { a_ c_ n_ } ( -- c-addr u )
-    nil str-buf !
-    a_ @ strlen false cstr str-buf !    
-    str-buf c_ n_ c-strncat drop 
-    str-buf strlen false cstr a_ !
-    a_ @ strlen ;
+: STRNCAT  { a_ c_ n_ } ( -- c-addr u )  
+    a_ @ c_ n_ c-strncat
+    strlen false cstr
+    dup a_ !
+    strlen ;
